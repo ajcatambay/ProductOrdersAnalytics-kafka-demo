@@ -1,0 +1,41 @@
+spring:
+  cloud.stream:
+      bindings:
+        poin:
+          destination: ProductOrders
+        poout:
+          destination: ProductOrders
+        posin:
+          destination: ProductOrders
+        pain:
+          destination: ProductOrdersAnalytics
+          group: ProductOrdersAnalytics
+        paout:
+          destination: ProductOrdersAnalytics
+      kafka.streams.binder:
+            configuration:
+              commit.interval.ms: 1000
+              default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              default.value.serde: org.springframework.kafka.support.serializer.JsonSerde
+              spring.json.trusted.packages: '*'
+              spring.json.value.default.type: com.bridgingcode.ProductOrdersAnalytics.model.ProductOrdersEvent
+            brokers:
+            serdeError: logAndContinue
+  kafka:
+    bootstrap-servers:
+    properties:
+      security:
+        protocol: SASL_SSL
+      sasl:
+        mechanism: PLAIN
+    jaas:
+      enabled: true
+      login-module: org.apache.kafka.common.security.plain.PlainLoginModule
+      options:
+        username:
+        password:
+    streams:
+      replication-factor: 3
+
+
+
